@@ -33,7 +33,7 @@ include '../includes/navbar.php';
         <!-- Links adicionais -->
         <div class="text-center mt-3">
             <a href="esqueci-senha.php" class="d-block">Esqueci minha senha</a>
-            <span class="text-muted">Ainda não tem conta?</span> 
+            <span class="text-muted">Ainda não tem conta?</span>
             <a href="cadastro.php">Cadastre-se</a>
         </div>
     </div>
