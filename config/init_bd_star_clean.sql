@@ -82,16 +82,16 @@ USE bd_star_clean;
 -- CLIENTES
 CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     data_nascimento DATE NOT NULL,
     telefone VARCHAR(20) NOT NULL,
     cpf VARCHAR(14) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('ATIVO','INATIVO') DEFAULT 'ativo'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('ATIVO','INATIVO') DEFAULT 'ATIVO'
 );
 
 -- PRESTADORES
@@ -104,28 +104,28 @@ CREATE TABLE prestadores (
     telefone VARCHAR(20) NOT NULL,
     especialidade VARCHAR(100) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    status ENUM('ATIVO','INATIVO') DEFAULT 'ativo'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('ATIVO','INATIVO') DEFAULT 'ATIVO'
 );
 
 -- ADMINISTRADORES
 CREATE TABLE administradores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
     email VARCHAR(150) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    status ENUM('ATIVO','INATIVO') DEFAULT 'ativo'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status ENUM('ATIVO','INATIVO') DEFAULT 'ATIVO'
 );
 
--- ENDEREÇOS DOS CLIENTES E PRESTADORES
+-- ENDEREÇOS (para clientes e prestadores)
 CREATE TABLE enderecos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT NOT NULL,
-    prestador_id INT NOT NULL,
+    cliente_id INT NULL,
+    prestador_id INT NULL,
     cep VARCHAR(9),
     logradouro VARCHAR(255),
     bairro VARCHAR(100),
@@ -133,8 +133,10 @@ CREATE TABLE enderecos (
     uf CHAR(2),
     numero VARCHAR(10),
     complemento VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id, prestador_id) REFERENCES clientes(id), prestador(id) ON DELETE CASCADE
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
+    FOREIGN KEY (prestador_id) REFERENCES prestadores(id) ON DELETE CASCADE
 );
 
 -- SERVIÇOS (ligados a prestadores)
@@ -154,7 +156,7 @@ CREATE TABLE disponibilidade (
     prestador_id INT NOT NULL,
     data DATE NOT NULL,
     hora TIME NOT NULL,
-    status ENUM('livre', 'ocupado') DEFAULT 'livre',
+    status ENUM('LIVRE', 'OCUPADO') DEFAULT 'LIVRE',
     FOREIGN KEY (prestador_id) REFERENCES prestadores(id) ON DELETE CASCADE
 );
 
@@ -163,10 +165,10 @@ CREATE TABLE agendamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     servico_id INT NOT NULL,
-    endereco INT,
+    endereco_id INT NULL,
     data DATE NOT NULL,
     hora TIME NOT NULL,
-    status ENUM('pendente', 'realizado', 'cancelado') DEFAULT 'pendente',
+    status ENUM('PENDENTE', 'REALIZADO', 'CANCELADO') DEFAULT 'PENDENTE',
     observacoes TEXT,
     FOREIGN KEY (cliente_id) REFERENCES clientes(id) ON DELETE CASCADE,
     FOREIGN KEY (servico_id) REFERENCES servicos(id) ON DELETE CASCADE,
