@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS bd_star_clean CHARACTER SET utf8mb4 COLLATE utf8mb
 USE bd_star_clean;
 
 -- CLIENTES
-CREATE TABLE clientes (
+CREATE TABLE Cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE clientes (
 );
 
 -- PRESTADORES
-CREATE TABLE prestadores (
+CREATE TABLE Prestador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_razao_social VARCHAR(150) NOT NULL,
     sobrenome_nome_fantasia VARCHAR(150) NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE prestadores (
 );
 
 -- ADMINISTRADORES
-CREATE TABLE administradores (
+CREATE TABLE Administrador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     sobrenome VARCHAR(100) NOT NULL,
@@ -41,8 +41,8 @@ CREATE TABLE administradores (
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 );
 
--- ENDEREÇOS (para clientes e prestadores)
-CREATE TABLE enderecos (
+-- Endereco (para clientes e prestadores)
+CREATE TABLE Endereco (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NULL,
     prestador_id INT NULL,
@@ -59,8 +59,8 @@ CREATE TABLE enderecos (
     FOREIGN KEY (prestador_id) REFERENCES prestadores(id) ON DELETE CASCADE
 );
 
--- SERVIÇOS (ligados a prestadores)
-CREATE TABLE servicos (
+-- Servico (ligados a prestadores)
+CREATE TABLE Servico (
     id INT AUTO_INCREMENT PRIMARY KEY,
     prestador_id INT NOT NULL,
     titulo VARCHAR(100) NOT NULL,
@@ -70,8 +70,8 @@ CREATE TABLE servicos (
     FOREIGN KEY (prestador_id) REFERENCES prestadores(id) ON DELETE CASCADE
 );
 
--- DISPONIBILIDADE (do prestador)
-CREATE TABLE disponibilidade (
+-- Disponibilidade (do prestador)
+CREATE TABLE Disponibilidade (
     id INT AUTO_INCREMENT PRIMARY KEY,
     prestador_id INT NOT NULL,
     data DATE NOT NULL,
@@ -80,8 +80,8 @@ CREATE TABLE disponibilidade (
     FOREIGN KEY (prestador_id) REFERENCES prestadores(id) ON DELETE CASCADE
 );
 
--- AGENDAMENTOS
-CREATE TABLE agendamentos (
+-- Agendamento
+CREATE TABLE Agendamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cliente_id INT NOT NULL,
     servico_id INT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE agendamentos (
 );
 
 -- AVALIAÇÕES DE SERVIÇOS
-CREATE TABLE avaliacoes_servicos (
+CREATE TABLE Avaliacao_servico (
     id INT AUTO_INCREMENT PRIMARY KEY,
     agendamento_id INT NOT NULL,
     nota INT CHECK (nota BETWEEN 1 AND 5),
@@ -105,7 +105,7 @@ CREATE TABLE avaliacoes_servicos (
 );
 
 -- AVALIAÇÕES DE PRESTADORES
-CREATE TABLE avaliacoes_prestadores (
+CREATE TABLE Avaliacao_prestador (
     id INT AUTO_INCREMENT PRIMARY KEY,
     prestador_id INT NOT NULL,
     cliente_id INT NOT NULL,
